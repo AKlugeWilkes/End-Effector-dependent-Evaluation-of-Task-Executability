@@ -52,6 +52,25 @@ def qv_mult(q1, v1):
     q2 = v1 + [0.0] 
     return q_mult(q_mult(q1, q2), q_conjugate(q1))[:3]
 
+def axisangle_to_q(v, theta):
+    """
+    Calcule a quaternion based on a vector and angle theta
+    Input
+    : param v: vector
+      param theta: angle theta
+
+    Output
+    : x-, y-, z-, w-quaternion
+    """
+    v = normalize(v)
+    x, y, z = v
+    theta /= 2
+    w = math.cos(theta)
+    x = x * math.sin(theta)
+    y = y * math.sin(theta)
+    z = z * math.sin(theta)
+    return x, y, z, w
+
 def q_mult(q1, q2):
     """
     Multiply two quaternions
@@ -378,5 +397,3 @@ def calcForAllTasks(file, robot_pose,task_poses_global,tool_height,tool_width,n=
         plot(result, inEuler)
 
     return result
-
-calcForAllTasks('irb4600_40_255.h5',np.array([0,0,0,0,0,0]),np.array([np.array([0,0,0,0,0,0]),np.array([0,0,0,0,math.pi/2,0])]),0.4,0.2,10,True,'result.csv',0.025,True)
