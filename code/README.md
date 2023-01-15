@@ -1,0 +1,1 @@
+This folder contains the main code, responsable for calculate the possible poses of the robot. Also, input_mock_euler and input_mock_quaternion are files that contains the initial pose of the robot and the goal poses.
