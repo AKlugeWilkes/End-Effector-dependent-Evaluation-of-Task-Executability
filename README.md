@@ -7,34 +7,72 @@ The authors are responsible for the content.
 
 #Goal
 
-  The goal of this project is calculate possible poses of a robot based on the tools measurements, the goal pose and the reachability map of the robot. Using the map, is possible to find the best pose of the robot by the collection of reachable poses and also the reachability index of each of them.
-
+The goal of this project is calculate possible poses of a robot based on the tools measurements, the goal pose and the reachability map of the robot. Using the map, is possible to find the best pose of the robot by the collection of reachable poses and also the reachability index of each of them.
+ 
  \page prerequisites Prerequisites 
 
+# Prerequisites:
+
+1. To install required python libraries run:
+    ```
+    pip3 install pandas numpy scipy numpy-quaternion sympy matplotlib h5py
+
+    pip install tkinter os sys pandas numpy pyrr opencv-python Pillow scipy sympy matplotlib matplotlib
+
+    sudo apt-get install python-imaging-tk python-scipy  python-matplotlib 
+    
+    python -m pip install numpy-quaternion
+    ```
+
+2. Please make sure that your computer/ virtual machine use Ubuntu 18.04 and has both Python 2.7 (to create the reachability maps) and Python 3 (to run this application).
+
+3. Install ROS Melodic http://wiki.ros.org/melodic/Installation/Ubuntu 
+
+4. Install Reuleaux https://gist.github.com/presleyreverdito/3a74d31cb6e8e2c3a1734719b0fcde0c up to step 2.1
+
+5. You can download the xacro file for the robots (to create the reachability map later)<br>
+from https://github.com/ros-industrial/abb_experimental branch kinetic-devel (for ABB robots)<br>
+from https://github.com/ros-industrial/universal_robot/tree/melodic-devel/ur_description/urdf (for UR robots)
+
+\page application How to Use the Application
 
 # How to Use the Application: 
 
-1. On the last line of main code, you need to change the input based on your test.
+1. Create the reachability map for your robot and saves it in folder "maps" of this project
 
-2. Build the docker:
-```
-docker build -t spp-maa .
-```
-3. Run it on terminal:
-```
-docker run spp-maa
-```
-4. Export the file from Docker to Host:
+2. Create a .csv file for the robot position and task positions (in global coordinate system) as instructed in the GUI, saves it in folder "code"
 
-    1. Find out the ID of the Docker:
+3. Open the UI from folder "code"
 
-    ```
-    docker ps -a
-    ```
-    2. Copy the file using:
-    ```
-    sudo docker cp <Docker_ID>:/result/result.csv /path/of/the/host
-    ```
+```
+cd code
+python3 maa_gui.py
+```
+
+![GUI Images](documentation/pictures/gui.png)
+
+
+and insert the required data:<br>
+
+1. Select between quaternion and euler;<br>
+
+2. The tool height and length are measured in meters;<br>
+
+3. The map should be saved on the "maps" inside of spp-maa project folder. And insert their names in the GUI (not their location);<br>
+
+4. Requirements for the input .csv data of tasks: <br>
+    - The robot position and the task positions have the form (x,y,z,a,b,c) in which x,y,z are the coordinates and a,b,c, if you are using euler angles. <br>
+
+    - If you are using quaternion: (x, y, z, Xq, Yq, Zq, Wq) where x ,y ,z are the coordinates and Xq, Yq, Zq, Wq are the quaternion values. <br>
+    
+    - These positions are measured in meter and relative to the global coordinate system.
+
+
+5. In folder "result", you can find the calculated result in the result.csv file (default case) and its plot in the result.svg file.
+
+On video below, you can see an example of usage of the GUI.
+
+![](documentation/HowTo_Video/gui_tutorial.mp4)
 
 \page createMap Create Map
 
@@ -87,9 +125,10 @@ rosrun map_creator create_reachability_map 0.05 <your_robot>.h5
 You can change the resolution from 0.05 to what ever you want. The recommended resolution is 0.12.
 Then you can find the .h5 file in /catkin_ws/src/reuleaux-melodic/map_creator/maps
 
-# Interface
-Unfortunately, The GUI is not working. Although, you can run main.py instead. Then, before you build the docker, change the parameters on it. If you want to use the interface, please change the branch to "Interface".
 
+# Docker
+
+If you want to use the docker, please change the branch.
 
 
 # Contact:
